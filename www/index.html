@@ -78,16 +78,18 @@
         <div ng-controller='imageController'>
           <button ng-click='panLeft()'>Left</button>
           <button ng-click='panRight()'>Right</button>
+          <button ng-click='panUp()'>Up</button>
+          <button ng-click='panDown()'>Down</button>
           <button ng-click='doubleScale()'>2x Scale</button>
           <button ng-click='halveScale()'>1/2 Scale</button>
           <button ng-click='takePicture()'>Take a picture</button>
+          <input type='file' id='fileInput'>
           <div class='clipper'>
             <canvas id='photo' class='photo'></canvas>
             <div class='box'></div>
           </div>
 <!--           <img src='data:image/jpeg;base64,{{dataUrl}}' class='testImage'>
  -->          
-        
           <div class='cropped'>
             <canvas id='result' class='result'></canvas>
           </div>
