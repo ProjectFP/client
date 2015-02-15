@@ -18,16 +18,18 @@
 	      $scope.panRight = panRight;
 	      $scope.panUp = panUp;
 	      $scope.panDown = panDown;
-	      $scope.doubleScale = doubleScale;
-
-	      angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+	      $scope.cropPicture = cropPicture;
 	    });
 
-	    function getCroppedImageDataUrl(){
-	      var cropped = document.getElementById('result');
-
-	      return cropped.toDataURL();
+	    function cropPicture(){
+	        loadCroppedCanvas('photo', 'result', getCropParams());
 	    }
+
+		function getCroppedImageDataUrl(){
+		  var cropped = document.getElementById('result');
+
+		  return cropped.toDataURL();
+		}
 
 	    function takePicture(){
 	      
@@ -44,13 +46,10 @@
 	      };
 
 	      $cordovaCamera.getPicture(options).then(function(imageData) {
-	        var sourceCoordinates;
 
 	        $scope.dataUrl = imageData;
 	        loadImgToCanvas('photo', $scope.dataUrl, 1500, 2000);
 
-	        // sourceCoordinates = calculateSourceImageCoordinates(1500, 1125, 0.2, 0.3);
-	        loadCroppedCanvas('photo', 'result', getCropParams());
 	      }, function(err) {
 	        // error
 	        console.log('ERROR: ', err);
@@ -69,19 +68,7 @@
 	      };
 
 	      img.src = 'data:image/jpeg;base64,' + dataUrl;
-	      // img.src =  dataUrl;
 	    }
-
-	    // function calculateSourceImageCoordinates(canvasHeight, canvasWidth, topPercent, heightPercent){
-	    //   var source = {
-	    //     x: 0,
-	    //     y: canvasHeight * topPercent,
-	    //     width: canvasWidth,
-	    //     height: canvasHeight * heightPercent
-	    //   };
-
-	    //   return source;
-	    // }
 
 	    function loadCroppedCanvas(sourceId, destinationId, cropParams){
 	      var source = document.getElementById(sourceId);
@@ -171,29 +158,6 @@
 	      $element.css(transformCss, action.setDirection(transformString, currentTranslate + action.panValue));
 
 	      loadCroppedCanvas('photo', 'result', getCropParams());
-	    }
-	    function doubleScale(elementId){
-	      elementId = elementId || 'photo';
-	      var element = document.getElementById(elementId);
-
-	      angular.element(element).css('-webkit-transform', 'scale3d(4, 4, 1)');
-
-	    }
-
-	    function halveScale(elementId){
-	    }
-
-	    function handleFileSelect(evt) {
-
-	      var file=evt.currentTarget.files[0];
-	      var reader = new FileReader();
-	      reader.onload = function (evt) {
-	        $scope.$apply(function($scope){
-	          $scope.dataUrl=evt.target.result;
-	          loadImgToCanvas('photo', $scope.dataUrl, 1000,1000);
-	        });
-	      };
-	      reader.readAsDataURL(file);
 	    }
 
 	    function getTranslateX(translate){
