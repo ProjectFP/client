@@ -1,4 +1,4 @@
-(function(angular){
+(function(angular, Caman){
 'use strict';
 
 	angular
@@ -85,7 +85,16 @@
 	            heightRatio;
 
 	        croppedContext.drawImage(img, cropParams.x, cropParams.y, cropParams.width, cropParams.height, 0, 0, cropParams.width, cropParams.height);
-	      	fileSendService.sendToServer(getCroppedImageDataUrl());
+
+			Caman('#result', function () {
+				// this.brightness(50);
+				this.greyscale();
+				this.contrast(100);
+				// this.saturation(-100);
+				this.render(function(){
+					fileSendService.sendToServer(getCroppedImageDataUrl());
+				});
+			});
 	      };
 
 	      img.src = 'data:image/jpeg;base64,' + $scope.dataUrl;
@@ -318,4 +327,4 @@
 	      return false;
 	    }
 	}
-})(angular);
+})(angular, Caman);
