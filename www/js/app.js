@@ -51,10 +51,10 @@ angular
         var sourceCoordinates;
 
         $scope.dataUrl = imageData;
-        loadImgToCanvas('photo', $scope.dataUrl, 1125, 1500);
+        loadImgToCanvas('photo', $scope.dataUrl, 1500, 2000);
 
-        sourceCoordinates = calculateSourceImageCoordinates(1500, 1125, 0.2, 0.3);
-        loadCroppedCanvas('photo', sourceCoordinates, 'result');
+        // sourceCoordinates = calculateSourceImageCoordinates(1500, 1125, 0.2, 0.3);
+        loadCroppedCanvas('photo', 'result', getCropParams());
       }, function(err) {
         // error
         console.log('ERROR: ', err);
@@ -76,30 +76,32 @@ angular
       // img.src =  dataUrl;
     }
 
-    function calculateSourceImageCoordinates(canvasHeight, canvasWidth, topPercent, heightPercent){
-      var source = {
-        x: 0,
-        y: canvasHeight * topPercent,
-        width: canvasWidth,
-        height: canvasHeight * heightPercent
-      };
+    // function calculateSourceImageCoordinates(canvasHeight, canvasWidth, topPercent, heightPercent){
+    //   var source = {
+    //     x: 0,
+    //     y: canvasHeight * topPercent,
+    //     width: canvasWidth,
+    //     height: canvasHeight * heightPercent
+    //   };
 
-      return source;
-    }
+    //   return source;
+    // }
 
-    function loadCroppedCanvas(sourceId, sourceCoordinates, destinationId){
+    function loadCroppedCanvas(sourceId, destinationId, cropParams){
       var source = document.getElementById(sourceId);
       var cropped = document.getElementById(destinationId);
       var croppedContext = cropped.getContext('2d');
       var img = new Image();
 
-      cropped.width = sourceCoordinates.width;
-      cropped.height = sourceCoordinates.height;
+      cropped.width = cropParams.width;
+      cropped.height = cropParams.height;
 
       img.onload = function drawCroppedImageToCanvas(){
-        console.log('Image Width and Height: ',this.width, this.height);
-        console.log('Data: ', JSON.stringify(sourceCoordinates));
-        croppedContext.drawImage(img, sourceCoordinates.x, sourceCoordinates.y, sourceCoordinates.width, sourceCoordinates.height, 0, 0, sourceCoordinates.width, sourceCoordinates.height);
+
+        var widthRatio,
+            heightRatio;
+
+        croppedContext.drawImage(img, cropParams.x, cropParams.y, cropParams.width, cropParams.height, 0, 0, cropParams.width, cropParams.height);
       };
 
       img.src = 'data:image/jpeg;base64,' + $scope.dataUrl;
@@ -137,7 +139,7 @@ angular
           panValue : -50,
           getCurrent : getTranslateY,
           setDirection : setTranslateY
-        }, 
+        },
 
         down: {
           panValue : 50,
@@ -171,6 +173,7 @@ angular
 
       $element.css(transformCss, action.setDirection(transformString, currentTranslate + action.panValue));
 
+      loadCroppedCanvas('photo', 'result', getCropParams());
     }
     function doubleScale(elementId){
       elementId = elementId || 'photo';
@@ -237,13 +240,120 @@ angular
       var currentOtherValue;
 
       if (type === 'x'){
-        console.log('inx');
         currentOtherValue = getTranslateY(translate);
         return ['translate3d(', value, 'px, ' , currentOtherValue, 'px, 0px)'].join('');
       } else {
-        console.log('iny');
         currentOtherValue = getTranslateX(translate);
         return ['translate3d(', currentOtherValue, 'px, ' , value, 'px, 0px)'].join('');
       }
+    }
+
+    function getCropParams(boxElement, imageElement){
+      var box,
+          image,
+          widthRatio,
+          heightRatio;
+
+      boxElement = boxElement  || document.getElementsByClassName('box')[0];
+      imageElement = imageElement || document.getElementsByClassName('photo')[0];
+
+      box = boxElement.getBoundingClientRect();
+      image = imageElement.getBoundingClientRect();
+
+      widthRatio = imageElement.width / image.width;
+      heightRatio = imageElement.height / image.height;
+
+      return {
+        x     : calculateCropX(boxElement, imageElement) * widthRatio,
+        y     : calculateCropY(boxElement, imageElement) * heightRatio,
+        width : calculateCropWidth(boxElement, imageElement) * widthRatio,
+        height: calculateCropHeight(boxElement, imageElement) * heightRatio
+      };
+    }
+
+    function calculateCropX(boxElement, imageElement){
+      return calculateCropCoords(boxElement, imageElement, 'x');
+    }
+
+    function calculateCropY(boxElement, imageElement){
+      return calculateCropCoords(boxElement, imageElement, 'y');
+    }
+
+    function calculateCropCoords(boxElement, imageElement, axis){
+      var box,
+          image,
+          axisToPropertyMap,
+          property;
+
+      axisToPropertyMap = {
+        x: 'left',
+        y: 'top'
+      };
+
+      property = axisToPropertyMap[axis];
+
+      boxElement = boxElement  || document.getElementsByClassName('box')[0];
+      imageElement = imageElement || document.getElementsByClassName('photo')[0];
+
+      box = boxElement.getBoundingClientRect();
+      image = imageElement.getBoundingClientRect();
+
+      if (image[property] >= box[property]){
+        return 0;
+      } else {
+        return box[property] - image[property];
+      }
+    }
+
+    function calculateCropHeight(boxElement, imageElement){
+      return calculateCropDimensions(boxElement, imageElement, 'height');
+    }
+
+    function calculateCropWidth(boxElement, imageElement){
+      return calculateCropDimensions(boxElement, imageElement, 'width');
+    }
+
+    function calculateCropDimensions(boxElement, imageElement, dimensionType){
+      var box,
+          image;
+
+      boxElement = boxElement  || document.getElementsByClassName('box')[0];
+      imageElement = imageElement || document.getElementsByClassName('photo')[0];
+
+      box = boxElement.getBoundingClientRect();
+      image = imageElement.getBoundingClientRect();
+
+      if (dimensionType === 'height'){
+        return Math.min(image.bottom, box.bottom) - Math.max(image.top, box.top);
+
+      } else if (dimensionType === 'width'){
+        return Math.min(image.right, box.right) - Math.max(image.left, box.left);
+      }
+    }
+
+    function isThereIntersection(boxElement, imageElement){
+      var box,
+          image,
+          isThereHorizontalIntersection,
+          isThereVerticalIntersection;
+
+      boxElement = boxElement  || document.getElementsByClassName('box')[0];
+      imageElement = imageElement || document.getElementsByClassName('photo')[0];
+
+      box = boxElement.getBoundingClientRect();
+      image = imageElement.getBoundingClientRect();
+
+      isThereHorizontalIntersection = !((image.right <= box.left ) || (image.left >= box.right));
+
+      if (isThereHorizontalIntersection){
+
+        isThereVerticalIntersection = !((image.bottom <= box.top) || (image.top >= box.bottom));
+
+        if(isThereVerticalIntersection) {
+          return true;
+        }
+      }
+
+      return false;
     }
   });
