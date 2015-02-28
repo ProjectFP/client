@@ -341,7 +341,6 @@
 			el = document.getElementById(elementId);
 
 			ionic.onGesture('drag', function(e){
-				console.log('drag', JSON.stringify(e));
 				ionic.requestAnimationFrame(function() { doDrag(e); });
 			}, el);
 
@@ -367,12 +366,15 @@
 				translateY,
 				$el;
 
-			translateX = $scope.x + e.gesture.deltaX;
-			translateY = $scope.y + e.gesture.deltaY;
+			if (e.gesture.touches.length === 1){
+				translateX = $scope.x + e.gesture.deltaX;
+				translateY = $scope.y + e.gesture.deltaY;
 
-			$el = angular.element($scope.el);
+				$el = angular.element($scope.el);
 
-			$scope.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + translateX + 'px, ' + translateY  + 'px, 0) scale(' + $scope.scale + ', ' + $scope.scale + ')';
+				$scope.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + translateX + 'px, ' + translateY  + 'px, 0) scale(' + $scope.scale + ', ' + $scope.scale + ')';
+			}
+
 		}
 	}
 })(angular, Caman);
