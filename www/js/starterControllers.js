@@ -19,6 +19,12 @@
 	      $scope.panUp = panUp;
 	      $scope.panDown = panDown;
 	      $scope.cropPicture = cropPicture;
+
+	      $scope.el = document.getElementById('photo');
+	      $scope.x = 0;
+	      $scope.y = 0;
+	      $scope.scale = 1;
+	      bindEventHandlers();
 	    });
 
 	    function cropPicture(){
@@ -326,5 +332,47 @@
 
 	      return false;
 	    }
+
+	    function bindEventHandlers(elementId){
+			elementId = elementId || 'photo';
+
+			var el;
+
+			el = document.getElementById(elementId);
+
+			ionic.onGesture('drag', function(e){
+				console.log('drag', JSON.stringify(e));
+				ionic.requestAnimationFrame(function() { doDrag(e); });
+			}, el);
+
+			ionic.onGesture('dragend', function(e){
+				$scope.x += e.gesture.deltaX;
+				$scope.y += e.gesture.deltaY;
+			}, el);
+
+			ionic.onGesture('pinch', function(e){
+				ionic.requestAnimationFrame(function() { doScale(e); });
+			}, el);
+
+		}
+
+		function doScale(e){
+			$scope.scale *= e.gesture.scale;
+			$scope.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + $scope.x + 'px, ' + $scope.y  + 'px, 0) scale(' + $scope.scale + ', ' + $scope.scale + ')';
+
+		}
+
+		function doDrag(e) {
+			var translateX,
+				translateY,
+				$el;
+
+			translateX = $scope.x + e.gesture.deltaX;
+			translateY = $scope.y + e.gesture.deltaY;
+
+			$el = angular.element($scope.el);
+
+			$scope.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + translateX + 'px, ' + translateY  + 'px, 0) scale(' + $scope.scale + ', ' + $scope.scale + ')';
+		}
 	}
 })(angular, Caman);
