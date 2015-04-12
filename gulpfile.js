@@ -1,50 +1,113 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var bower = require('bower');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var sh = require('shelljs');
+//JS Linting
+//Sass compilation
+//Karma Testing
+//Code Coverage  https://github.com/karma-runner/karma-coverage/issues/87
 
-var paths = {
-  sass: ['./scss/**/*.scss']
+//Browserify
+//Templatecache
+
+'use strict';
+    
+var gulp           = require('gulp'),
+    sass           = require('gulp-sass'),
+    minifyCss      = require('gulp-minify-css'),
+    rename         = require('gulp-rename'),
+    karma          = require('karma').server,
+    jshint         = require('gulp-jshint'),
+    jshintReporter = require('jshint-stylish'),
+    browserify     = require('browserify'),
+    gutil          = require('gulp-util'),
+    source         = require('vinyl-source-stream');
+
+
+
+var config = {
+
+  sass: {
+    src: ['sass/**/*.scss'],
+    dist: 'www/css'
+  },
+
+  js: {
+    src: ['app/src/**/*.js']
+  },
+
+  karma : {
+    testFiles : ['app/test/**/*.test.js'],
+    configFile : 'app/test/karma.config.js'
+  },
+
+  filesToCopy: {
+    ionicFonts: {
+      src: 'bower_components/ionic/fonts/*',
+      dist: 'www/fonts'
+    },
+    index: {
+      src: 'app/src/index.html',
+      dist: 'www/'
+    }
+  },
+
+  browserify : {
+    src : './app/src/app.js',
+    outputName : 'site.js',
+    dest : 'www/js/'
+  }
+
 };
 
-gulp.task('default', ['sass']);
+function onError(err) {
+    gutil.beep();
+    gutil.log(gutil.colors.red(err));
+
+    this.emit('end');
+}
+
+
+gulp.task('browserify', ['lint'], function() {
+    return browserify(config.browserify.src)
+        .bundle()
+        .on('error', onError)
+        .pipe(source(config.browserify.outputName))
+        .pipe(gulp.dest(config.browserify.dest));
+});
+
+gulp.task('copyFiles', function(){
+  for (var key in config.filesToCopy){
+    gulp
+      .src(config.filesToCopy[key].src)
+      .pipe(gulp.dest(config.filesToCopy[key].dist));
+  }
+});
 
 gulp.task('sass', function(done) {
-  gulp.src('./scss/ionic.app.scss')
+  gulp.src(config.sass.src)
     .pipe(sass())
-    .pipe(gulp.dest('./www/css/'))
+    .pipe(gulp.dest(config.sass.dist))
     .pipe(minifyCss({
       keepSpecialComments: 0
     }))
     .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./www/css/'))
+    .pipe(gulp.dest(config.sass.dist))
     .on('end', done);
 });
 
+gulp.task('karma', function(done){
+  karma.start({
+    configFile: __dirname + '/' + config.karma.configFile,
+    singleRun: true
+  }, done);
+});
+
+gulp.task('lint', function(){
+  gulp.src(config.js.src)
+    .pipe(jshint())
+    .pipe(jshint.reporter(jshintReporter));
+
+});
+
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(config.sass.src, ['sass']);
 });
 
-gulp.task('install', ['git-check'], function() {
-  return bower.commands.install()
-    .on('log', function(data) {
-      gutil.log('bower', gutil.colors.cyan(data.id), data.message);
-    });
-});
-
-gulp.task('git-check', function(done) {
-  if (!sh.which('git')) {
-    console.log(
-      '  ' + gutil.colors.red('Git is not installed.'),
-      '\n  Git, the version control system, is required to download Ionic.',
-      '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
-      '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
-    );
-    process.exit(1);
-  }
-  done();
-});
+gulp.task('default', ['sass']);
