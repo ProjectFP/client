@@ -1,23 +1,16 @@
 'use strict';
 
 angular
-  .module('starter', [
+  .module('projectfp', [
     'ionic',
     'ngCordova',
-    'starter.controllers'])
+    'projectfp.login'])
 
-  .run(function($ionicPlatform) {
-    $ionicPlatform.ready(function() {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if(window.cordova && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      }
-      if(window.StatusBar) {
-        StatusBar.styleDefault();
-      }
-    });
-  });
+  .config(defaultRoute);
 
-require('./modules/starterControllers.js');
-require('./modules/starterServices.js');
+function defaultRoute($urlRouterProvider){
+  $urlRouterProvider.otherwise('/login');
+}
+
+require('./modules/templatecache');
+require('./modules/login');
