@@ -1,9 +1,3 @@
-//JS Linting
-//Sass compilation
-//Karma Testing
-//Code Coverage  https://github.com/karma-runner/karma-coverage/issues/87
-
-//Browserify
 //Templatecache
 
 'use strict';
@@ -17,9 +11,10 @@ var gulp           = require('gulp'),
     jshintReporter = require('jshint-stylish'),
     browserify     = require('browserify'),
     gutil          = require('gulp-util'),
-    source         = require('vinyl-source-stream');
-
-
+    source         = require('vinyl-source-stream'),
+    _              = require('lodash'),
+    browserSync    = require('browser-sync'),
+    templateCache  = require('gulp-angular-templatecache');
 
 var config = {
 
@@ -29,7 +24,7 @@ var config = {
   },
 
   js: {
-    src: ['app/src/**/*.js']
+    src: ['app/src/**/*.js', '!app/src/archive/**/*']
   },
 
   karma : {
@@ -48,11 +43,33 @@ var config = {
     }
   },
 
-  browserify : {
-    src : './app/src/app.js',
-    outputName : 'site.js',
-    dest : 'www/js/'
-  }
+  browserify : [
+    {
+      src : './app/src/app.js',
+      outputName : 'app.js',
+      dest : 'www/js/'
+    },
+    {
+      src : './app/src/modules/vendor/vendor.js',
+      outputName : 'vendor.js',
+      dest : 'www/js/'
+    }
+  ],
+
+  browserSync : {
+    js : 'www/js/app.js',
+    css : 'www/css/styles.min.css',
+    index: 'www/index.html'
+  },
+
+  templates: {
+    //All html files in the modules folder
+    src: ['app/src/modules/**/*.html'],
+    //Destination of templateCached file
+    dest: 'app/src/modules/templateCache',
+    //Name of templateCached file
+    templateCacheName: 'index.js'
+  },
 
 };
 
@@ -65,11 +82,14 @@ function onError(err) {
 
 
 gulp.task('browserify', ['lint'], function() {
-    return browserify(config.browserify.src)
-        .bundle()
-        .on('error', onError)
-        .pipe(source(config.browserify.outputName))
-        .pipe(gulp.dest(config.browserify.dest));
+
+    config.browserify.forEach(function(item){
+      browserify(item.src)
+          .bundle()
+          .on('error', onError)
+          .pipe(source(item.outputName))
+          .pipe(gulp.dest(item.dest));
+      });
 });
 
 gulp.task('copyFiles', function(){
@@ -106,8 +126,41 @@ gulp.task('lint', function(){
 
 });
 
-gulp.task('watch', function() {
-  gulp.watch(config.sass.src, ['sass']);
+gulp.task('build', function(){
+  gulp.start('sass');
+  gulp.start('copyFiles');
+  gulp.start('browserify');
+  gulp.start('templateCache');
 });
 
-gulp.task('default', ['sass']);
+gulp.task('watch', ['build'], function() {
+
+  gulp.watch(config.sass.src, ['sass']);
+  gulp.watch(config.js.src, ['browserify', 'karma']);
+  gulp.watch(_.pluck(config.filesToCopy, 'src'), ['copyFiles']);
+  gulp.watch(config.templates.src, ['templateCache']);
+
+  gulp.start('browser-sync');
+});
+
+gulp.task('browser-sync', function() {
+  browserSync({
+    server: {
+      baseDir : 'www'
+    },
+    files: [
+      config.browserSync.js,
+      config.browserSync.css,
+      config.browserSync.index
+    ]
+  });
+});
+
+gulp.task('templateCache', function(){
+  gulp
+    .src(config.templates.src)
+    .pipe(templateCache(config.templates.templateCacheName,{module: 'projectfp'}))
+    .pipe(gulp.dest(config.templates.dest));
+});
+
+gulp.task('default', ['watch']);
