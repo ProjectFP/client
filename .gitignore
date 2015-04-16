@@ -13,3 +13,4 @@ www/index.html
 .DS_Store
 
 app/test/coverage/
+app/src/modules/templatecache/index.js
