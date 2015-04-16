@@ -4,6 +4,6 @@ var controllersModule = require('./index.js');
 
 controllersModule.controller('LoginController', LoginController);
 
-function LoginController(){
+function LoginController($cordovaOauth){
 	this.test = 'hello there';
 }
