@@ -8,10 +8,13 @@ Client proof of concept
 4. Install cordova cli globall if not already done (npm install -g cordova)
 5. bower install
 6. Install plugins
+'''
 * cordova plugin add com.ionic.keyboard
 * cordova plugin add org.apache.cordova.camera
 * cordova plugin add org.apache.cordova.console
 * cordova plugin add org.apache.cordova.device
+* cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git
+'''
 7. Download Phonegap Developer App onto your phone (http://app.phonegap.com/)
 8. Update the ip address in starterServices.js to your local ip address and then start node server (nodemon server.js)
 9. Add the ios platform to the project (ionic platform add ios)
