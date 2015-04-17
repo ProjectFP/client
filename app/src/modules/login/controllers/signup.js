@@ -2,9 +2,9 @@
 
 var controllersModule = require('./index.js');
 
-controllersModule.controller('SignupController', SignupController);
+controllersModule.controller('SignupController', controllerDefinition);
 
-function SignupController($ionicHistory){
+function controllerDefinition($ionicHistory){
 	this.signup = 'signup';
 	$ionicHistory.viewHistory();
 
