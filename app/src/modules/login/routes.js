@@ -11,9 +11,9 @@ function routes($stateProvider){
       controller: 'LoginController as LoginController'
     })
 
-	.state('signup', {
-		url: '/signup',
-		templateUrl: 'login/templates/signup.html',
-		controller: 'SignupController as SignupController'
-	});
+    .state('signup', {
+      url: '/signup',
+      templateUrl: 'login/templates/signup.html',
+      controller: 'SignupController as SignupController'
+    });
 }
