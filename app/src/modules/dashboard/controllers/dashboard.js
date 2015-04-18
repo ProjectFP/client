@@ -2,8 +2,8 @@
 
 var controllersModule = require('./index.js');
 
-controllersModule.controller('DashboardController', controllerDefinition);
+controllersModule.controller('DashboardController', ControllerDefinition);
 
-function controllerDefinition(){
+function ControllerDefinition(){
 	console.log('dashboard controller');
 }
