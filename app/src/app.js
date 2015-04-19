@@ -5,7 +5,7 @@ angular
     'ionic',
     'ngCordova',
     'projectfp.login',
-    'projectfp.dashboard'])
+    'projectfp.main'])
 
   .config(defaultRoute);
 
@@ -15,4 +15,4 @@ function defaultRoute($urlRouterProvider){
 
 require('./modules/templatecache');
 require('./modules/login');
-require('./modules/dashboard');
+require('./modules/main');
