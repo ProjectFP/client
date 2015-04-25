@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+
+var json = {};
+var periodName;
+var periodYear = 2012;
+var periodFirstMonth = 3;
+var periodLastMonth = 4;
+
+json.periods = {};
+
+for (var i = 0; i<30; i++){
+	periodName = [periodYear, formatNumber(periodFirstMonth), formatNumber(periodLastMonth)].join('');
+
+
+	json.periods[periodName] = [];
+
+
+	for (var y = 1; y < 30; y++){
+		json.periods[periodName].push(populateNumbers(periodYear, periodFirstMonth, periodLastMonth));
+	}
+
+	if (periodYear === new Date().getFullYear() && (periodFirstMonth === new Date().getMonth() || periodLastMonth === new Date().getMonth())) {
+		break;
+	}
+
+	periodYear = periodFirstMonth + 2 > 12 ? periodYear + 1 : periodYear;
+	periodFirstMonth = periodFirstMonth + 2 > 12 ? periodFirstMonth + 2 -12 : periodFirstMonth + 2;
+	periodLastMonth = periodLastMonth + 2 > 12 ? periodLastMonth + 2 - 12 : periodLastMonth + 2;
+
+}
+
+
+console.log('json: ', JSON.stringify(json));
+
+function populateNumbers(periodYear, periodFirstMonth, periodLastMonth){
+	var date;
+	var number;
+
+	date = [
+		periodYear,
+		(Math.random() < .5 ? periodFirstMonth : periodLastMonth),
+		(Math.ceil(Math.random()*30))].join('-');
+
+	number = Math.round(Math.random()*100000000);
+
+	return {
+		date: date,
+		number : number
+	};
+}
+
+function formatNumber(number) {
+	if (number < 10){
+		return '0'+number;
+	}
+	return number;
+}
+</script>
+</body>
+</html>
