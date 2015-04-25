@@ -6,7 +6,7 @@ function routes($stateProvider){
   $stateProvider
 
     .state('main.dashboard.home', {
-      url: '/home',
+      url: '',
       templateUrl: 'main-dashboard-home/templates/landing.html',
       controller: 'DashboardController as DashboardController'
     });
