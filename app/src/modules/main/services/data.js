@@ -4,9 +4,9 @@ var servicesModule = require('./index');
 
 var data = require('./mockData');
 
-servicesModule.service('DataService', ServiceDefinition);
+servicesModule.factory('DataService', FactoryDefinition);
 
-function ServiceDefinition(){
+function FactoryDefinition(){
 	return {
 		data: data
 	};
