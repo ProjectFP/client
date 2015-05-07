@@ -6,13 +6,15 @@ var mockData = require('./mockData');
 
 servicesModule.factory('DataService', FactoryDefinition);
 
-function FactoryDefinition(StorageService, $q){
+function FactoryDefinition(StorageService, $q, UtilsService){
 
 	var data;
 
 	return {
 		getData: getData,
-		getCurrentPeriod: getCurrentPeriod
+		currentPeriodNumbers: currentPeriodNumbers,
+		currentPeriodCount: currentPeriodCount,
+		previousPeriodCount: previousPeriodCount
 	};
 
 	function getData(){
@@ -45,7 +47,35 @@ function FactoryDefinition(StorageService, $q){
 		return deferred.promise;
 	}
 
-	function getCurrentPeriod(){
+	function currentPeriodNumbers(){
+		var currentPeriodKey,
+			periods;
 
+		currentPeriodKey = UtilsService.currentPeriodKey();
+		periods = data.periods;
+
+		periods[currentPeriodKey] = periods[currentPeriodKey] || [];
+
+		return periods[currentPeriodKey];
+	}
+
+	function currentPeriodCount(){
+		return currentPeriodNumbers().length;
+	}
+
+	function previousPeriodCount(){
+		var currentPeriodKey,
+			periods,
+			count;
+
+		currentPeriodKey = UtilsService.currentPeriodKey();
+		periods = data.periods;
+		count = 0;
+
+		for (var period in periods){
+			count += period.length;
+		}
+
+		return count;
 	}
 }

@@ -1,5 +1,4 @@
-<div>In main-dashboard-home</div>
 <div ui-sref="main.dashboard.messages">Message Center</div>
-<div ui-sref="main.dashboard.periods.all">40 receipts uploaded this period</div>
-<div ui-sref="main.dashboard.periods.specific({id: 23})">300 receipts in previous periods</div>
+<div ui-sref="main.dashboard.numbers({id: {{DashboardController.currentPeriodKey}} })">{{DashboardController.currentPeriodCount}} receipts uploaded this period</div>
+<div ui-sref="main.dashboard.periods">{{DashboardController.previousPeriodCount}} receipts in previous periods</div>
 <div>$500 winnings</div>
