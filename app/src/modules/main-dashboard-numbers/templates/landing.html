@@ -1,3 +1,8 @@
-<div>
-	params {{NumbersController.params}}
-</div>
+<ion-content>
+	<div>
+		Current Period {{NumbersController.currentPeriod}}
+	</div>
+	<div ng-repeat="number in NumbersController.numbers">
+		{{number.date}} : {{number.number}}
+	</div>
+</ion-content>

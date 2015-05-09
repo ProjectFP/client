@@ -4,8 +4,14 @@ var controllersModule = require('./index.js');
 
 controllersModule.controller('NumbersController', ControllerDefinition);
 
-function ControllerDefinition($stateParams){
+function ControllerDefinition($stateParams, DataService){
 	console.log('numbers controller');
 
-	this.params = $stateParams;
+	var vm = this;
+
+	vm.currentPeriod = $stateParams.id;
+
+	DataService.getData().then(function(data){
+		vm.numbers = data.periods[$stateParams.id];
+	});
 }

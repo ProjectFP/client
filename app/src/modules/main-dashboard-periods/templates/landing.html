@@ -1,11 +1,13 @@
-<ul>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-	<li>all periods 1</li>
-
-	{{PeriodsController.params}}
-</ul>
+<ion-content>
+	<ul>
+		<li>
+			Period / Count
+		</li>
+		<li
+			ng-repeat="(key, value) in PeriodsController.numbers"
+			ui-sref="main.dashboard.numbers({id: {{key}} })"
+			ng-if="key !== PeriodsController.currentPeriod">
+			{{key}} / {{value.length}}
+		</li>
+	</ul>
+</ion-content>
