@@ -5,7 +5,7 @@ var servicesModule = require('./index');
 servicesModule.factory('CanvasGesturesService', FactoryDefinition);
 
 function FactoryDefinition(){
-    var api, transform, ticking, el;
+    var api, transform, ticking, el, pinching, lastScale;
 
     initialize();
 
@@ -18,6 +18,7 @@ function FactoryDefinition(){
 
     function initialize() {
         ticking = false;
+        pinching = false;
         transform = resetTransform();
         requestElementUpdate({});
     }
@@ -28,25 +29,26 @@ function FactoryDefinition(){
         ionic.onGesture('drag', onDragEvent, el);
         ionic.onGesture('dragend', onDragEndEvent, el);
         ionic.onGesture('pinch', onPinch, el);
+        ionic.onGesture('release', onRelease, el);
+
     }
 
     function onDragEvent(ev) {
-        var initial = {
-            x: transform.translate.x,
-            y: transform.translate.y
-        };
-
-        // ev.gesture.stopPropagation();
-
-        if (ev.gesture.touches.length === 1) {                
-            initial.x += ev.gesture.deltaX;
-            initial.y += ev.gesture.deltaY;
-
-            requestElementUpdate(initial);
+        if (pinching) {
+            return;
         }
+
+        requestElementUpdate({
+            x: transform.translate.x + ev.gesture.deltaX,
+            y: transform.translate.y + ev.gesture.deltaY
+        });
     }
 
     function onDragEndEvent(ev) {
+        if (pinching) {
+            return;
+        }
+
         transform.translate.x += ev.gesture.deltaX;
         transform.translate.y += ev.gesture.deltaY;
         transform.translate.z += ev.gesture.deltaZ;
@@ -85,6 +87,19 @@ function FactoryDefinition(){
     }
 
     function onPinch(ev) {
+        if (!pinching) {
+            pinching = true;
+        }
+
+        lastScale = transform.scale + ev.gesture.scale - 1;
+        requestElementUpdate({scale: lastScale});
+    }
+
+    function onRelease(ev) {
+        if (pinching) {
+            pinching = false;
+            transform.scale = lastScale;
+        }
     }
 
     function resetTransform(){
