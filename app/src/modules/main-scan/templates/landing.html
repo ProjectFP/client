@@ -2,8 +2,19 @@
 	.original-image {
 		width: 320px;
 	}
+
+	.crop-guide {
+		width: 90%;
+		position: absolute;
+		top: 30%;
+		left: 5%;
+		border: 1px solid red;
+		height: 15%;
+	}
 </style>
 <div>
 	SCAN CONTROLLER
+	<button ng-click="ScanController.cropImage()">Crop</button>
 	<canvas image-load class="original-image" image-data="ScanController.imageData"></canvas>
+	<div class="crop-guide"></div>
 </div>
