@@ -12,7 +12,7 @@ function routes($stateProvider){
       		return CameraService.takePicture();
       	}
       },
-      controller: 'ScanController as ScanController',
+      controller: 'ScanController',   //Did not use ControllerAs because $ionicModal does not work well with 'this'
       templateUrl: 'main-scan/templates/landing.html'
     });
 
