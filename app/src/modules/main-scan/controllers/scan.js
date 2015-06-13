@@ -4,7 +4,7 @@ var controllersModule = require('./index.js');
 
 controllersModule.controller('ScanController', ControllerDefinition);
 
-function ControllerDefinition($scope, DataService, CameraService, CanvasCropService, $ionicModal){
+function ControllerDefinition($scope, DataService, CameraService, CanvasCropService, $ionicModal, ImageUploadService){
 	//Did not use 'this' because $ionicModal does not work well with 'this'
 
 	console.log('In Scan Controller');
@@ -25,6 +25,10 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 	};
 	$scope.closeModal = function() {
 		$scope.modal.hide();
+	};
+
+	$scope.confirm = function(){
+		ImageUploadService.uploadImage();
 	};
 
 	//Cleanup the modal when we're done with it!
