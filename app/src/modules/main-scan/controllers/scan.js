@@ -24,6 +24,7 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 		$scope.modal.show();
 	};
 	$scope.closeModal = function() {
+		$scope.croppedData = '';
 		$scope.modal.hide();
 	};
 

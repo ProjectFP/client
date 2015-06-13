@@ -32,7 +32,10 @@ function directiveDefinition(CameraService, CanvasGesturesService){
                 if(value){
                     $scope.imageUrl = value;
                     loadImage();
-                    CanvasGesturesService.initialize();
+
+                    if (!isCroppedImage){
+                        CanvasGesturesService.initialize();
+                    }
                 }
             }
 
@@ -54,7 +57,7 @@ function directiveDefinition(CameraService, CanvasGesturesService){
 
                     if (isCroppedImage){
                         canvas.width = cropParams.width;
-                        canvas.width = cropParams.height;
+                        canvas.height = cropParams.height;
 
                         console.log('params in directive: ', $scope.cropParams);
                         context.drawImage(img, cropParams.x, cropParams.y, cropParams.width, cropParams.height, 0, 0, cropParams.width, cropParams.height);
