@@ -63,7 +63,7 @@ function directiveDefinition(CameraService, CanvasGesturesService){
                         context.drawImage(img, cropParams.x, cropParams.y, cropParams.width, cropParams.height, 0, 0, cropParams.width, cropParams.height);
 
                     } else {
-                        canvas.width = 2000;
+                        canvas.width = 1500;    //TODO: Find way to autodetect dimensions of picture since device cameras can vary in resolution
                         canvas.height = 2000;
                         context.drawImage(img, 0, 0);
                     }
