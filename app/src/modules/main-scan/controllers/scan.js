@@ -11,6 +11,7 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 
 	$scope.imageData = CameraService.imageData;
 	$scope.cropImage = cropImage;
+	$scope.cropParams = {};
 
 	$ionicModal.fromTemplateUrl('main-scan/templates/cropModal.html', {
 		scope: $scope,
@@ -45,5 +46,8 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 	function cropImage(){
 		$scope.openModal();
 		console.log('params', JSON.stringify(CanvasCropService.getCropParams()));
+		$scope.cropParams = CanvasCropService.getCropParams();
+		console.log('before assigning crop data');
+		$scope.croppedData = $scope.imageData;
 	}
 }
