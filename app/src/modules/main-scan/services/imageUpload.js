@@ -29,17 +29,19 @@ function FactoryDefinition($http){
 		form = new FormData();
 		form.append('upload', blob);
 
-		//https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-		$http.post('http://192.168.1.208:3000/upload', form, {
+		console.log('Form', form);
+
+        //https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
+        return $http.post('http://192.168.1.208:3000/upload', form, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
-        }).success(function(){
-        	console.log('success');
-        }).error(function(){
-        	console.log('error');
+        }).success(function(data, status, headers, config){
+            console.log('success', status, data.value);
+            return data.value;
+        }).error(function(data, status, headers, config){
+            console.log('error', status, headers, config);
         });
 
-		console.log('Form', form);
 	}
 
     function dataUriToBlob(dataURI) {

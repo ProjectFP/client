@@ -67,6 +67,9 @@ function directiveDefinition(CameraService, CanvasGesturesService){
                         canvas.height = 2000;
                         context.drawImage(img, 0, 0);
                     }
+
+                    //clean up image to prevent memory leaks
+                    img = null;
                 };
 
                 img.src = 'data:image/jpeg;base64,' + $scope.imageUrl;

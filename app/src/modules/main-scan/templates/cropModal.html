@@ -1,3 +1,14 @@
+<style type="text/css">
+	input.value {
+		border: 1px solid red;
+	}
+
+	.value-container {
+		display: inline-block;
+		width: 12%;
+	}
+</style>
+
 <ion-modal-view>
 	<ion-header-bar>
 		<h1 class="title">My Modal title</h1>
@@ -6,6 +17,41 @@
 		<canvas image-load class="cropped-image" image-data="croppedData" cropped-image="true" crop-params="cropParams"></canvas>
 
 		<button ng-click="closeModal()">Close</button>
-		<button ng-click="confirm()">Confirm</button>
+		<button ng-click="confirm()">Parse</button>
+
+		<div>
+			Result: {{result}}
+		</div>
+
+		<div class="verify">		
+			<div class="value-container">
+				<input class="value value-1" name="number" type="number" min="0" max="9" step="1" value="{{result[0]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-2" name="number" type="number" min="0" max="9" step="1" value="{{result[1]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-3" name="number" type="number" min="0" max="9" step="1" value="{{result[2]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-4" name="number" type="number" min="0" max="9" step="1" value="{{result[3]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-5" name="number" type="number" min="0" max="9" step="1" value="{{result[4]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-6" name="number" type="number" min="0" max="9" step="1" value="{{result[5]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-7" name="number" type="number" min="0" max="9" step="1" value="{{result[6]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			<div class="value-container">
+				<input class="value value-8" name="number" type="number" min="0" max="9" step="1" value="{{result[7]}}" pattern="[0-9]*" onClick="this.setSelectionRange(0, this.value.length)"/>
+			</div>
+			</div>
+		</div>
+
+		<button ng-click="sendUpdate()">Confirm</button>
+
 	</ion-content>
 </ion-modal-view>
