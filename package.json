@@ -32,6 +32,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "cordovaPlugins": [
-    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git"
-  ]
+    "org.apache.cordova.inappbrowser"
+  ],
+  "cordovaPlatforms": []
 }
