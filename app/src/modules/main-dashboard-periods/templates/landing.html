@@ -4,10 +4,10 @@
 			Period / Count
 		</li>
 		<li
-			ng-repeat="(key, value) in PeriodsController.numbers"
-			ui-sref="main.dashboard.numbers({id: {{key}} })"
-			ng-if="key !== PeriodsController.currentPeriod">
-			{{key}} / {{value.length}}
+			ng-repeat="period in PeriodsController.numbers"
+			ui-sref="main.dashboard.numbers({id: {{period.periodName}} })"
+			ng-if="period.periodName !== PeriodsController.currentPeriod">
+			{{period.periodName}} / {{period.entries.length}}
 		</li>
 	</ul>
 </ion-content>

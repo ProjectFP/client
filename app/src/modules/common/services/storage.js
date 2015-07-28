@@ -10,14 +10,18 @@ function FactoryDefinition($window){
 		api;
 
 	keys = {
-		app : 'ProjectFP'
+		app : 'ProjectFP',
+		token: 'JWT'
 	};
 
 	api = {
 		clearAll: clearAll,
 		clearAppData: clearAppData,
+		clearToken: clearToken,
 		getAppData: getAppData,
-		setAppData: setAppData
+		getToken: getToken,
+		setAppData: setAppData,
+		setToken: setToken
 	};
 
 	return api;
@@ -48,5 +52,17 @@ function FactoryDefinition($window){
 
 	function clearAppData(){
 		clearKey(keys.app);
+	}
+
+	function setToken(token){
+		set(keys.token, token);
+	}
+
+	function getToken(){
+		return get(keys.token);
+	}
+
+	function clearToken(){
+		clearKey(keys.token);
 	}
 }

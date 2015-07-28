@@ -29,6 +29,7 @@ function FactoryDefinition(StorageService, $q, UtilsService){
 
 			if (storageData) {
 				data = storageData;
+				indexPeriods();
 				deferred.resolve(data);
 
 			} else {
@@ -38,6 +39,7 @@ function FactoryDefinition(StorageService, $q, UtilsService){
 
 					StorageService.setAppData(mockData);
 					data = mockData;
+					indexPeriods();
 
 					deferred.resolve(data);
 				}, 1000);
@@ -49,14 +51,14 @@ function FactoryDefinition(StorageService, $q, UtilsService){
 
 	function currentPeriodNumbers(){
 		var currentPeriodKey,
-			periods;
+			periodsIndex;
 
 		currentPeriodKey = UtilsService.currentPeriodKey();
-		periods = data.periods;
+		periodsIndex = data.periodsIndex;
 
-		periods[currentPeriodKey] = periods[currentPeriodKey] || [];
+		periodsIndex[currentPeriodKey] = periodsIndex[currentPeriodKey] || [];
 
-		return periods[currentPeriodKey];
+		return periodsIndex[currentPeriodKey].entries;
 	}
 
 	function currentPeriodCount(){
@@ -65,17 +67,28 @@ function FactoryDefinition(StorageService, $q, UtilsService){
 
 	function previousPeriodCount(){
 		var currentPeriodKey,
-			periods,
+			periodsIndex,
 			count;
 
 		currentPeriodKey = UtilsService.currentPeriodKey();
-		periods = data.periods;
+		periodsIndex = data.periodsIndex;
 		count = 0;
 
-		for (var period in periods){
-			count += period.length;
+		for (var period in periodsIndex){
+			count += periodsIndex[period].entries.length;
 		}
 
 		return count;
+	}
+
+	function indexPeriods(){
+		var period;
+
+		data.periodsIndex = {};
+
+		for (var i = 0; i < data.periods.length; i++){
+			period = data.periods[i];
+			data.periodsIndex[period.periodName] = period;
+		}
 	}
 }

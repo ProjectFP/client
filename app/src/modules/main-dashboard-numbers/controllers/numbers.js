@@ -12,6 +12,6 @@ function ControllerDefinition($stateParams, DataService){
 	vm.currentPeriod = $stateParams.id;
 
 	DataService.getData().then(function(data){
-		vm.numbers = data.periods[$stateParams.id];
+		vm.numbers = data.periodsIndex[$stateParams.id].entries;
 	});
 }

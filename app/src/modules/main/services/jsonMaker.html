@@ -11,19 +11,25 @@ var periodName;
 var periodYear = 2012;
 var periodFirstMonth = 3;
 var periodLastMonth = 4;
+var periodObj;
 
-json.periods = {};
+json.name = 'Name of User';
+json.periods = [];
 
 for (var i = 0; i<30; i++){
 	periodName = [periodYear, formatNumber(periodFirstMonth), formatNumber(periodLastMonth)].join('');
 
-
-	json.periods[periodName] = [];
+	periodObj = {
+		periodName: periodName,
+		entries: []
+	};
 
 
 	for (var y = 1; y < 30; y++){
-		json.periods[periodName].push(populateNumbers(periodYear, periodFirstMonth, periodLastMonth));
+		periodObj.entries.push(populateNumbers(periodYear, periodFirstMonth, periodLastMonth));
 	}
+
+	json.periods.push(periodObj);
 
 	if (periodYear === new Date().getFullYear() && (periodFirstMonth === new Date().getMonth() || periodLastMonth === new Date().getMonth())) {
 		break;
