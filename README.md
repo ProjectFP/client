@@ -24,3 +24,5 @@ Client proof of concept
 13. Use direction buttons to move the image around. The image within the blue box will be the cropped picture
 14. Press on 'Crop' to crop the image within the blue box
 15. Image will be adjusted by camanjs before uploaded to the server and saved as crop.png in the repo's root
+
+16. Run gulp (gulp) to build. This will generate content into the www/ server
