@@ -13,10 +13,12 @@ function FactoryDefinition($cordovaOauth, AuthConstants){
 	};
 
 	function login(){
-		$cordovaOauth.facebook(AuthConstants.fbClientId, AuthConstants.fbScope)
+		return $cordovaOauth.facebook(AuthConstants.fbClientId, AuthConstants.fbScope)
 	        .then(processResult, handleError)
 	        .then(function(item){
 	        	console.log('made it to second', item);
+
+	        	return item;
 	        });
 
         function processResult(result){

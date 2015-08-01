@@ -21,6 +21,8 @@ function FactoryDefinition(StorageService, $q, UtilsService){
 		var deferred = $q.defer(),
 			storageData;
 
+			StorageService.clearAppData();
+
 		if (data){
 			deferred.resolve(data);
 

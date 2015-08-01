@@ -1,0 +1,16 @@
+//https://developers.facebook.com/docs/graph-api/reference/user
+
+{
+	"name" : "name",
+	"periods" : [
+		{
+			"periodName" : "20150506",
+			"entries" : [
+				{
+					"createdAt" : "2015", 
+					"number": 232132399
+				}
+			]
+		}
+	]
+}

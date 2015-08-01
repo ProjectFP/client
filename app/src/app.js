@@ -8,10 +8,22 @@ angular
     'projectfp.login',
     'projectfp.main'])
 
-  .config(defaultRoute);
+  .config(defaultRoute)
+  .run(checkForTokenOnStateChange);
 
 function defaultRoute($urlRouterProvider){
   $urlRouterProvider.otherwise('/login');
+}
+
+function checkForTokenOnStateChange($rootScope, $state, StorageService){
+	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+		var requireLogin = toState.data.requireLogin;
+
+		if (requireLogin && StorageService.getToken() === null) {
+			event.preventDefault();
+			$state.go('login');
+		}
+	});
 }
 
 require('./modules/templatecache');

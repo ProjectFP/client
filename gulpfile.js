@@ -136,7 +136,8 @@ gulp.task('build', function(){
 gulp.task('watch', ['build'], function() {
 
   gulp.watch(config.sass.src, ['sass']);
-  gulp.watch(config.js.src, ['browserify', 'karma']);
+  // gulp.watch(config.js.src, ['browserify', 'karma']);
+  gulp.watch(config.js.src, ['browserify']);
   gulp.watch(_.pluck(config.filesToCopy, 'src'), ['copyFiles']);
   gulp.watch(config.templates.src, ['templateCache']);
 
@@ -146,7 +147,8 @@ gulp.task('watch', ['build'], function() {
 gulp.task('browser-sync', function() {
   browserSync({
     server: {
-      baseDir : 'www'
+      baseDir : 'www',
+      port: 3030
     },
     files: [
       config.browserSync.js,
