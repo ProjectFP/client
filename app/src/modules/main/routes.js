@@ -13,7 +13,7 @@ function routes($stateProvider){
         requireLogin: true
       },
       resolve : {
-        data : function(DataService) {
+        profile : function(DataService) {
             return DataService.getData();
         }
       }

@@ -4,9 +4,9 @@
 			Period / Count
 		</li>
 		<li
-			ng-repeat="period in PeriodsController.numbers"
+			ng-repeat="period in PeriodsController.periods"
 			ui-sref="main.dashboard.numbers({id: {{period.periodName}} })"
-			ng-if="period.periodName !== PeriodsController.currentPeriod">
+			ng-if="period.periodName !== PeriodsController.currentPeriodKey">
 			{{period.periodName}} / {{period.entries.length}}
 		</li>
 	</ul>

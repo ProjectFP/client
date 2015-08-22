@@ -6,91 +6,74 @@ var mockData = require('./mockData');
 
 servicesModule.factory('DataService', FactoryDefinition);
 
-function FactoryDefinition(StorageService, $q, UtilsService){
+function FactoryDefinition(StorageService, $q, UtilsService, ProfileApis){
 
-	var data;
+	var profile = {};
 
 	return {
-		getData: getData,
-		currentPeriodNumbers: currentPeriodNumbers,
-		currentPeriodCount: currentPeriodCount,
-		previousPeriodCount: previousPeriodCount
+		getData: getData
 	};
 
 	function getData(){
-		var deferred = $q.defer(),
-			storageData;
+		console.log('got to GET DATA');
 
-			StorageService.clearAppData();
+		return ProfileApis.getAccountData()
+			.then(function(response){
+				profile.data = response.data;
+				console.log('RECEIVED DATA PROFILE.DATA', JSON.stringify(profile.data));
+				processData();
 
-		if (data){
-			deferred.resolve(data);
+				return profile;
+			});
+	}
 
-		} else {
-			storageData = StorageService.getAppData();
+	function processData(){
+		var currentPeriodKey,
+			data;
 
-			if (storageData) {
-				data = storageData;
-				indexPeriods();
-				deferred.resolve(data);
+		currentPeriodKey = UtilsService.currentPeriodKey();
+		data = profile.data;
 
-			} else {
+		indexPeriods();
+		mapCurrentPeriodEntries();
+		calculatePreviousPeriodsCount();
 
-				//simulate async call to server
-				setTimeout(function(){
+		function indexPeriods(){
+			var period;
 
-					StorageService.setAppData(mockData);
-					data = mockData;
-					indexPeriods();
+			data.periodsIndex = {};
 
-					deferred.resolve(data);
-				}, 1000);
+			for (var i = 0; i < data.periods.length; i++){
+				period = data.periods[i];
+				data.periodsIndex[period.periodName] = period;
 			}
 		}
 
-		return deferred.promise;
-	}
+		function mapCurrentPeriodEntries(){
+			var currentPeriod = data.periodsIndex[currentPeriodKey];
 
-	function currentPeriodNumbers(){
-		var currentPeriodKey,
-			periodsIndex;
-
-		currentPeriodKey = UtilsService.currentPeriodKey();
-		periodsIndex = data.periodsIndex;
-
-		periodsIndex[currentPeriodKey] = periodsIndex[currentPeriodKey] || [];
-
-		return periodsIndex[currentPeriodKey].entries;
-	}
-
-	function currentPeriodCount(){
-		return currentPeriodNumbers().length;
-	}
-
-	function previousPeriodCount(){
-		var currentPeriodKey,
-			periodsIndex,
-			count;
-
-		currentPeriodKey = UtilsService.currentPeriodKey();
-		periodsIndex = data.periodsIndex;
-		count = 0;
-
-		for (var period in periodsIndex){
-			count += periodsIndex[period].entries.length;
+			data.currentPeriod = {
+				key: currentPeriodKey,
+				data: currentPeriod,
+				count: currentPeriod.entries.length
+			};
 		}
 
-		return count;
-	}
+		function calculatePreviousPeriodsCount(){
+			var periodsIndex,
+				count;
 
-	function indexPeriods(){
-		var period;
+			periodsIndex = data.periodsIndex;
+			count = 0;
 
-		data.periodsIndex = {};
+			for (var period in periodsIndex){
 
-		for (var i = 0; i < data.periods.length; i++){
-			period = data.periods[i];
-			data.periodsIndex[period.periodName] = period;
+				if (periodsIndex[period] !== data.currentPeriod.data) {
+					count += periodsIndex[period].entries.length;
+				}
+			}
+
+			data.previousPeriodsCount = count;
 		}
 	}
 }

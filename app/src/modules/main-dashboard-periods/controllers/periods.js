@@ -4,14 +4,9 @@ var controllersModule = require('./index.js');
 
 controllersModule.controller('PeriodsController', ControllerDefinition);
 
-function ControllerDefinition($stateParams, DataService, UtilsService){
-	console.log('periods controller');
+function ControllerDefinition($stateParams, profile){
 	var vm = this;
 
-	vm.currentPeriod = UtilsService.currentPeriodKey();
-
-	DataService.getData()
-	.then(function(data){
-		vm.numbers = data.periods;
-	});
+	vm.currentPeriodKey = profile.data.currentPeriod.key;
+	vm.periods = profile.data.periods;
 }
