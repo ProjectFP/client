@@ -4,7 +4,7 @@ var servicesModule = require('./index');
 
 servicesModule.factory('AuthApis', FactoryDefinition);
 
-function FactoryDefinition($http, AuthConstants){
+function FactoryDefinition($http, AuthConstants, envConstants){
 
 	var api;
 
@@ -14,18 +14,18 @@ function FactoryDefinition($http, AuthConstants){
 	};
 
 	function signUp(accessToken){
-		return $http.post(AuthConstants.signupUrl, {
-			email: 'testemail@gmail.com',		// TODO: Remove this
-			name: 'test name',					// TODO: Remove this
-			token: accessToken
+
+		return $http.post(envConstants.hostUrl + '/signup', {
+			token: accessToken['access_token']
 		});
 	}
 
 	function login(accessToken){
-		return $http.post(AuthConstants.loginUrl, {
-			email: 'testemail@gmail.com',		// TODO: Remove this
-			name: 'test name',					// TODO: Remove this
-			token: accessToken
+
+		var token = JSON.parse(accessToken).access_token;
+
+		return $http.post(envConstants.hostUrl + '/login', {
+			token: token
 		});
 	}
 

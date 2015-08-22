@@ -4,7 +4,7 @@ var servicesModule = require('./index');
 
 servicesModule.factory('ImageUploadService', FactoryDefinition);
 
-function FactoryDefinition($http){
+function FactoryDefinition($http, envConstants){
 	var api;
 
 	api = {
@@ -32,7 +32,7 @@ function FactoryDefinition($http){
 		console.log('Form', form);
 
         //https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-        return $http.post('http://192.168.1.208:3000/upload', form, {
+        return $http.post(envConstants.hostUrl+'/upload', form, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         }).success(function(data, status, headers, config){

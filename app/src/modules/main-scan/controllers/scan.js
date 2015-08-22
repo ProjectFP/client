@@ -4,7 +4,7 @@ var controllersModule = require('./index.js');
 
 controllersModule.controller('ScanController', ControllerDefinition);
 
-function ControllerDefinition($scope, DataService, CameraService, CanvasCropService, $ionicModal, ImageUploadService, $http){
+function ControllerDefinition($scope, DataService, CameraService, CanvasCropService, $ionicModal, ImageUploadService, $http, envConstants){
 	//Did not use 'this' because $ionicModal does not work well with 'this'
 
 	console.log('In Scan Controller');
@@ -49,7 +49,7 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 		data = {
 			receipt: value.join(''),
 			email: 'jt@gmail.com',
-			period: "20150506",
+			period: "20150708",
 			_id: "554e7344d51292071e205a03"
 		};
 
@@ -62,7 +62,7 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 		console.log('Form', form);
 
         //https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-        return $http.post('http://192.168.1.208:3000/receipt', data
+        return $http.post(envConstants.hostUrl + '/receipt', data
         // 	, {
         //     transformRequest: angular.identity,
         //     headers: {'Content-Type': undefined}
@@ -72,7 +72,8 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
             return data.value;
         }).error(function(data, status, headers, config){
             console.log('Receipt error', status, headers, config);
-        });
+        })
+        .then(DataService.getData);
 	};
 
 	//Cleanup the modal when we're done with it!
