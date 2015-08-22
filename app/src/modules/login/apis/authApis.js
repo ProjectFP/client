@@ -9,16 +9,8 @@ function FactoryDefinition($http, AuthConstants, envConstants){
 	var api;
 
 	api = {
-		signUp: signUp,
 		login: login
 	};
-
-	function signUp(accessToken){
-
-		return $http.post(envConstants.hostUrl + '/signup', {
-			token: accessToken['access_token']
-		});
-	}
 
 	function login(accessToken){
 
