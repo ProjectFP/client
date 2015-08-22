@@ -23,6 +23,10 @@ var config = {
     dist: 'www/css'
   },
 
+  wwwPlatformFolder : {
+    ios : 'platforms/ios/www/js/'
+  },
+
   js: {
     src: ['app/src/**/*.js', '!app/src/archive/**/*']
   },
@@ -88,7 +92,8 @@ gulp.task('browserify', ['lint'], function() {
           .bundle()
           .on('error', onError)
           .pipe(source(item.outputName))
-          .pipe(gulp.dest(item.dest));
+          .pipe(gulp.dest(item.dest))
+          .pipe(gulp.dest(config.wwwPlatformFolder.ios));
       });
 });
 
