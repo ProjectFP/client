@@ -3,6 +3,6 @@
 		Current Period {{NumbersController.currentPeriod}}
 	</div>
 	<div ng-repeat="number in NumbersController.profile.data.periodsIndex[NumbersController.currentPeriod].entries">
-		{{number.createdAt}} : {{number.number}}
+		{{number.createdAt}} : {{number.number}} : <span ng-if='number.prizeName'>{{number.prizeName}} - ${{number.winningAmount}}</span>
 	</div>
 </ion-content>

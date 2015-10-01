@@ -4,4 +4,7 @@
 
 <div ui-sref="main.dashboard.periods">{{DashboardController.profileData.data.previousPeriodsCount}} receipts in previous periods</div>
 
-<div>$500 winnings</div>
+<div 
+  ng-if="DashboardController.profileData.data.totalWinning">
+	You've won ${{DashboardController.profileData.data.totalWinning}} in previous periods!
+</div>

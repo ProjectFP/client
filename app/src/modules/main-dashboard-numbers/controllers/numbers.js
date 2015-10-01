@@ -9,4 +9,6 @@ function ControllerDefinition($stateParams, DataService, profile){
 
 	vm.currentPeriod = $stateParams.id;
 	vm.profile = profile;
+
+	console.log('currentPeriod:', vm.currentPeriod, $stateParams.id);
 }

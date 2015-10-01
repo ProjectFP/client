@@ -14,6 +14,7 @@ Client proof of concept
 * cordova plugin add org.apache.cordova.console
 * cordova plugin add org.apache.cordova.device
 * cordova plugin add org.apache.cordova.inappbrowser
+* ionic plugin add https://github.com/phonegap-build/PushPlugin.git
 '''
 7. Download Phonegap Developer App onto your phone (http://app.phonegap.com/)
 8. Update the ip address in starterServices.js to your local ip address and then start node server (nodemon server.js)

@@ -32,7 +32,12 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "cordovaPlugins": [
-    "org.apache.cordova.inappbrowser"
+    "org.apache.cordova.inappbrowser",
+    "https://github.com/phonegap-build/PushPlugin.git",
+    {
+      "locator": "https://github.com/phonegap-build/PushPlugin.git",
+      "id": "com.phonegap.plugins.PushPlugin"
+    }
   ],
   "cordovaPlatforms": []
 }

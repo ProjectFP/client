@@ -6,12 +6,16 @@ var mockData = require('./mockData');
 
 servicesModule.factory('DataService', FactoryDefinition);
 
-function FactoryDefinition(StorageService, $q, UtilsService, ProfileApis){
+function FactoryDefinition(StorageService, $q, UtilsService, ProfileApis, ionicUserRegistration){
 
-	var profile = {};
+	var profile = {},
+		registeredUser;
+
+	registeredUser = false;
 
 	return {
-		getData: getData
+		getData: getData,
+		getUserData: getUserData
 	};
 
 	function getData(){
@@ -21,7 +25,16 @@ function FactoryDefinition(StorageService, $q, UtilsService, ProfileApis){
 			.then(function(response){
 				profile.data = response.data;
 				console.log('RECEIVED DATA PROFILE.DATA', JSON.stringify(profile.data));
+				
 				processData();
+
+				if (registeredUser === false) {
+					ionicUserRegistration.registerUser(profile);
+
+					registeredUser = true;
+				}
+
+				console.log('PROFILE::::', profile, JSON.stringify(profile));
 
 				return profile;
 			});
@@ -75,5 +88,9 @@ function FactoryDefinition(StorageService, $q, UtilsService, ProfileApis){
 
 			data.previousPeriodsCount = count;
 		}
+	}
+
+	function getUserData(){
+		console.log('profile', profile);
 	}
 }

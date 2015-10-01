@@ -49,7 +49,7 @@ function ControllerDefinition($scope, DataService, CameraService, CanvasCropServ
 		data = {
 			receipt: value.join(''),
 			email: 'jt@gmail.com',
-			period: "20150708",
+			period: "2015-07-08",
 			_id: "554e7344d51292071e205a03"
 		};
 

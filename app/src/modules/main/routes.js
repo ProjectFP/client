@@ -14,6 +14,7 @@ function routes($stateProvider){
       },
       resolve : {
         profile : function(DataService) {
+            console.log('in resolve');
             return DataService.getData();
         }
       }

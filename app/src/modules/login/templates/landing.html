@@ -2,4 +2,13 @@
 	<img src="http://www.tealit.com/templates/images/numbers.png" width="100%">
 
 	<button class="button button-clear" ng-click="LoginController.facebookLogin()">Login</button>
+
+
+	<button class="button button-block button-dark" ng-click="LoginController.identifyUser()">
+	  Identify a user
+	</button>
+
+	<button class="button button-block button-positive" ng-if="LoginController.identified" ng-click="LoginController.pushRegister()">
+	  Register for Push
+	</button>
 </ion-content>

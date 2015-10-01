@@ -3,6 +3,8 @@
 angular
   .module('projectfp', [
     'ionic',
+    'ionic.service.core',
+    'ionic.service.push',
     'ngCordova',
     'projectfp.common',
     'projectfp.login',
@@ -19,7 +21,12 @@ function checkForTokenOnStateChange($rootScope, $state, StorageService){
 	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
 		var requireLogin = toState.data.requireLogin;
 
+    console.log('got to check token');
+
 		if (requireLogin && StorageService.getToken() === null) {
+      console.log('rerouting to login');
+
+
 			event.preventDefault();
 			$state.go('login');
 		}
